@@ -8,7 +8,7 @@ OUTPUT_DIR='YOUR_PATH/work_dir/vit_h_hybrid_pt_1200e'
 DATA_PATH='YOUR_PATH/data/hybrid_train.csv'
 
 JOB_NAME=$1
-PARTITION=${PARTITION:-"video"}
+PARTITION=${PARTITION:-"h100x"}
 # 8 for 1 node, 16 for 2 node, etc.
 GPUS=${GPUS:-64}
 GPUS_PER_NODE=${GPUS_PER_NODE:-8}

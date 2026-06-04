@@ -4,6 +4,12 @@
 # https://github.com/rwightman/pytorch-image-models/tree/master/timm
 # https://github.com/facebookresearch/deit
 # https://github.com/facebookresearch/dino
+
+
+# 这一部分代码主要是**视频分类**的微调和评估脚本，基于VideoMAE模型。
+# 它包含了命令行参数解析、数据集构建、模型加载、训练和评估等功能。
+# 用户可以通过命令行参数来配置训练过程中的各种细节，如学习率、优化器、数据增强等。
+# 该脚本还支持分布式训练和使用Deepspeed进行大规模训练。
 # --------------------------------------------------------'
 
 import argparse

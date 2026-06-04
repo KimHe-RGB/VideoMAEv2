@@ -1,0 +1,25 @@
+name: videomae
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+dependencies:
+  - python=3.9
+  - pip
+  - pytorch=2.0.0
+  - torchvision
+  - torchaudio
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - pillow
+  - pip:
+    - av==15.0.0
+    - git+https://github.com/dmlc/decord.git
+    - deepspeed
+    - einops
+    - opencv-python
+    - tensorboard==2.9.0
+    - tensorboardX==1.8
+    - timm==0.4.12
