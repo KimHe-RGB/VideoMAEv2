@@ -21,6 +21,7 @@ Each pipeline run is stored in one run folder under `RUNS_ROOT/RUN_NAME`, includ
 - `01_post_pretrain.sh`: stage 1 only
 - `02_finetune.sh`: stage 2 only
 - `03_evaluate.sh`: stage 3 only
+- `convert_hf_safetensors_to_pth.py`: converts Hugging Face `model.safetensors` into a torch checkpoint for stage 1
 - `pipeline_common.sh`: shared helper functions
 
 ## Quick Start
@@ -38,6 +39,18 @@ cp Evaluation/pipeline_config.example.env Evaluation/pipeline_config.env
 ```bash
 bash Evaluation/run_full_pipeline.sh Evaluation/pipeline_config.env
 ```
+
+## Convert Hugging Face Safetensors
+
+If your starting checkpoint is a Hugging Face `model.safetensors`, convert it first:
+
+```bash
+python Evaluation/convert_hf_safetensors_to_pth.py \
+	/path/to/model.safetensors \
+	--output /path/to/model_converted.pth
+```
+
+Then set `POST_INIT_CKPT` in `Evaluation/pipeline_config.env` to the converted `.pth` path.
 
 ## Notes
 

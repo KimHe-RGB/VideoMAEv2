@@ -145,3 +145,10 @@ cython_debug/
 # others
 work_dir/
 data/
+
+.DS_Store
+
+# ignore checkpoints files
+*.pth
+*.safetensors
+*.ckpt
