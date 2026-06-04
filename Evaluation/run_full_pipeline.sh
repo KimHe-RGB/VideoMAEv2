@@ -43,18 +43,21 @@ echo "[INFO] RUN_DIR=${RUN_DIR}"
   echo "RUNS_ROOT=${RUNS_ROOT}"
   echo "RUN_NAME=${RUN_NAME}"
   echo "RUN_DIR=${RUN_DIR}"
-  env | sort | grep -E '^(PYTHON_BIN|TORCHRUN_BIN|NPROC_PER_NODE|MASTER_PORT|UNLABELED_CLIPS_DIR|POST_|FINETUNE_|FIN_|EVAL_)=' || true
+  env | sort | grep -E '^(PYTHON_BIN|TORCHRUN_BIN|NPROC_PER_NODE|MASTER_PORT|PREP_|UNLABELED_CLIPS_DIR|POST_|FINETUNE_|FIN_|EVAL_)=' || true
 } > "${RUN_DIR}/metadata/config.resolved.env"
 
 export PROJECT_ROOT
 export RUN_DIR
 
-STAGES="${STAGES:-post_pretrain,finetune,evaluate}"
+STAGES="${STAGES:-prepare_clips,post_pretrain}"
 
 run_stage() {
   local name="$1"
   echo "[INFO] ===== stage: ${name} ====="
   case "$name" in
+    prepare_clips)
+      bash "${SCRIPT_DIR}/prepare_clips.sh"
+      ;;
     post_pretrain)
       bash "${SCRIPT_DIR}/01_post_pretrain.sh"
       ;;

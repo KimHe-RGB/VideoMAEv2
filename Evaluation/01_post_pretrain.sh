@@ -10,7 +10,7 @@ source "${SCRIPT_DIR}/pipeline_common.sh"
 UNLABELED_CLIPS_DIR="${UNLABELED_CLIPS_DIR:-${PROJECT_ROOT}/Data/dataset_post_pretrain}"
 PYTHON_BIN="${PYTHON_BIN:-python}"
 
-POST_MODEL="${POST_MODEL:-pretrain_videomae_base_patch16_224}"
+POST_MODEL="${POST_MODEL:-pretrain_videomae_huge_patch16_224}"
 POST_MASK_TYPE="${POST_MASK_TYPE:-tube}"
 POST_MASK_RATIO="${POST_MASK_RATIO:-0.9}"
 POST_DECODER_MASK_TYPE="${POST_DECODER_MASK_TYPE:-run_cell}"
@@ -41,6 +41,7 @@ manifest_path="${RUN_DIR}/data/post_pretrain_manifest.csv"
 safe_dir="${RUN_DIR}/data/post_pretrain_videos_nospace"
 cmd_log="${RUN_DIR}/metadata/commands.log"
 
+require_dir "${UNLABELED_CLIPS_DIR}"
 count="$(build_unlabeled_manifest_with_safe_links "${UNLABELED_CLIPS_DIR}" "${safe_dir}" "${manifest_path}")"
 echo "[INFO] Post-pretrain clips indexed: ${count}"
 
@@ -73,8 +74,15 @@ cmd=(
 
 if [[ -n "${POST_INIT_CKPT}" ]]; then
   if [[ "${POST_INIT_CKPT}" == *.safetensors ]]; then
-    echo "[ERROR] POST_INIT_CKPT points to .safetensors, but run_mae_pretraining.py expects torch checkpoint format." >&2
-    exit 1
+    converted_ckpt="${RUN_DIR}/post_pretrain/exported/init_from_safetensors.pth"
+    convert_cmd=(
+      "${PYTHON_BIN}" -u "${PROJECT_ROOT}/Evaluation/convert_hf_safetensors_to_pth.py"
+      "${POST_INIT_CKPT}"
+      --output "${converted_ckpt}"
+    )
+    log_cmd "${cmd_log}" "${convert_cmd[@]}"
+    "${convert_cmd[@]}"
+    POST_INIT_CKPT="${converted_ckpt}"
   fi
   require_file "${POST_INIT_CKPT}"
   cmd+=(--finetune "${POST_INIT_CKPT}")

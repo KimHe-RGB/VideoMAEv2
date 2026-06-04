@@ -6,7 +6,11 @@ now_ts() {
 }
 
 abs_path() {
-  python - "$1" <<'PY'
+  local py_bin="${PYTHON_BIN:-python3}"
+  if ! command -v "$py_bin" >/dev/null 2>&1; then
+    py_bin="python"
+  fi
+  "$py_bin" - "$1" <<'PY'
 import os
 import sys
 print(os.path.abspath(os.path.expanduser(sys.argv[1])))
